@@ -23,6 +23,14 @@ https://geocoding-api.open-meteo.com/v1/search?name=Ottawa&count=1&language=es&f
 https://api.open-meteo.com/v1/forecast?latitude=45.41117&longitude=-75.69812&current=temperature_2m
 ```
 
+### Pronóstico a 7 días
+
+Las opciones `6` y `7` consultan el pronóstico diario de Open-Meteo para la ciudad default o para todas las ciudades guardadas. Cada día muestra temperatura máxima y mínima, descripción del clima (códigos WMO) y probabilidad de lluvia, respetando la unidad configurada (`°C` / `°F`).
+
+```
+https://api.open-meteo.com/v1/forecast?latitude=45.41117&longitude=-75.69812&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max&forecast_days=7&timezone=auto
+```
+
 ## Inicializar proyecto
 
 ```bash
@@ -41,6 +49,8 @@ Esta es la apariencia que deseamos crear
   3. Buscar y agregar ciudad
   4. Eliminar ciudad
   5. Establecer ciudad default
+  6. Pronóstico 7 días (ciudad default)
+  7. Pronóstico 7 días (todas las ciudades) (1)
   8. Ajustes (°C)
   9. Salir
 ════════════════════════════════════════

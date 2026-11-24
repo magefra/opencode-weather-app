@@ -8,6 +8,14 @@ export interface Ciudad {
   longitud: number;
 }
 
+export interface DiaPronostico {
+  fecha: string;
+  tempMax: number;
+  tempMin: number;
+  codigoClima: number;
+  probabilidadLluvia: number | null;
+}
+
 export interface Configuracion {
   ciudades: Ciudad[];
   ciudadDefault: number | null;

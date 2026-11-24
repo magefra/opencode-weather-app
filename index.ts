@@ -1,9 +1,10 @@
-import { buscarCoordenadas, obtenerClima } from "./src/api";
+import { buscarCoordenadas, obtenerClima, obtenerPronostico } from "./src/api";
 import { cargarConfiguracion, guardarConfiguracion } from "./src/storage";
 import {
   cerrarEntrada,
   imprimirClima,
   imprimirError,
+  imprimirPronostico,
   imprimirMenu,
   listarCiudades,
   mensaje,
@@ -22,6 +23,16 @@ async function consultarClima(ciudad: Ciudad): Promise<void> {
   try {
     const { temperatura, etiqueta } = await obtenerClima(ciudad, config.unidad);
     imprimirClima(ciudad, temperatura, etiqueta);
+  } catch (error) {
+    imprimirError(error);
+  }
+}
+
+async function consultarPronostico(ciudad: Ciudad): Promise<void> {
+  mensaje("Consultando pronóstico...");
+  try {
+    const { dias, etiqueta } = await obtenerPronostico(ciudad, config.unidad);
+    imprimirPronostico(ciudad, dias, etiqueta);
   } catch (error) {
     imprimirError(error);
   }
@@ -64,6 +75,25 @@ async function opcionTodasLasCiudades(): Promise<void> {
   }
   for (const ciudad of config.ciudades) {
     await consultarClima(ciudad);
+  }
+}
+
+async function opcionPronosticoDefault(): Promise<void> {
+  const ciudad = config.ciudades.find((item) => item.id === config.ciudadDefault);
+  if (!ciudad) {
+    mensaje("No hay ciudad default. Usa la opción 3 o la opción 5 para elegir una.");
+    return;
+  }
+  await consultarPronostico(ciudad);
+}
+
+async function opcionPronosticoTodas(): Promise<void> {
+  if (config.ciudades.length === 0) {
+    mensaje("Aún no hay ciudades guardadas. Usa la opción 3 para agregar una.");
+    return;
+  }
+  for (const ciudad of config.ciudades) {
+    await consultarPronostico(ciudad);
   }
 }
 
@@ -156,6 +186,12 @@ async function main(): Promise<void> {
       case "5":
         await opcionEstablecerDefault();
         break;
+      case "6":
+        await opcionPronosticoDefault();
+        break;
+      case "7":
+        await opcionPronosticoTodas();
+        break;
       case "8":
         await opcionAjustes();
         break;
@@ -163,7 +199,7 @@ async function main(): Promise<void> {
         mensaje("¡Hasta luego!");
         return;
       default:
-        mensaje("Opción inválida. Elige 1, 2, 3, 4, 5, 8 o 9.");
+        mensaje("Opción inválida. Elige 1, 2, 3, 4, 5, 6, 7, 8 o 9.");
     }
 
     console.log();
