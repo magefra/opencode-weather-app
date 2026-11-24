@@ -7,6 +7,7 @@ import {
   imprimirMenu,
   listarCiudades,
   mensaje,
+  mensajeExito,
   preguntar,
 } from "./src/ui";
 import type { Ciudad, Configuracion } from "./src/types";
@@ -96,7 +97,7 @@ async function opcionAgregarCiudad(): Promise<void> {
   config.ciudades.push(ciudad);
   if (config.ciudadDefault === null) config.ciudadDefault = ciudad.id;
   await guardar();
-  mensaje(`Ciudad agregada: ${ciudad.nombre}, ${ciudad.pais}.`);
+  mensajeExito(`Ciudad agregada: ${ciudad.nombre}, ${ciudad.pais}.`);
 }
 
 async function opcionEliminarCiudad(): Promise<void> {
@@ -116,7 +117,7 @@ async function opcionEliminarCiudad(): Promise<void> {
     config.ciudadDefault = config.ciudades[0]?.id ?? null;
   }
   await guardar();
-  mensaje("Ciudad eliminada.");
+  mensajeExito("Ciudad eliminada.");
 }
 
 async function opcionEstablecerDefault(): Promise<void> {
@@ -125,13 +126,13 @@ async function opcionEstablecerDefault(): Promise<void> {
 
   config.ciudadDefault = seleccion.ciudad.id;
   await guardar();
-  mensaje(`Ciudad default: ${seleccion.ciudad.nombre}, ${seleccion.ciudad.pais}.`);
+  mensajeExito(`Ciudad default: ${seleccion.ciudad.nombre}, ${seleccion.ciudad.pais}.`);
 }
 
 async function opcionAjustes(): Promise<void> {
   config.unidad = config.unidad === "C" ? "F" : "C";
   await guardar();
-  mensaje(`Unidad de temperatura cambiada a °${config.unidad}.`);
+  mensajeExito(`Unidad de temperatura cambiada a °${config.unidad}.`);
 }
 
 async function main(): Promise<void> {

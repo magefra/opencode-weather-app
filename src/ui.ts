@@ -1,5 +1,6 @@
 import { createInterface } from "node:readline";
 import { stdin as entrada, stdout as salida } from "node:process";
+import { colorear } from "./colores";
 import type { Ciudad, Configuracion } from "./types";
 
 const LINEA = "═".repeat(40);
@@ -26,8 +27,8 @@ lector.on("close", () => {
   rechazarLinea = null;
 });
 
-export function preguntar(mensaje: string): Promise<string> {
-  salida.write(mensaje);
+export function preguntar(texto: string): Promise<string> {
+  salida.write(colorear(texto, "cyan"));
   const pendiente = lineasPendientes.shift();
   if (pendiente !== undefined) return Promise.resolve(pendiente);
 
@@ -42,17 +43,20 @@ export function cerrarEntrada(): void {
 }
 
 export function imprimirMenu(config: Configuracion): void {
-  console.log(LINEA);
-  console.log("         WEATHER CLI");
-  console.log(LINEA);
-  console.log("  1. Clima de ciudad default");
-  console.log(`  2. Clima de todas las ciudades (${config.ciudades.length})`);
-  console.log("  3. Buscar y agregar ciudad");
-  console.log("  4. Eliminar ciudad");
-  console.log("  5. Establecer ciudad default");
-  console.log(`  8. Ajustes (°${config.unidad})`);
-  console.log("  9. Salir");
-  console.log(LINEA);
+  const lineas = [
+    LINEA,
+    "         WEATHER CLI",
+    LINEA,
+    "  1. Clima de ciudad default",
+    `  2. Clima de todas las ciudades (${config.ciudades.length})`,
+    "  3. Buscar y agregar ciudad",
+    "  4. Eliminar ciudad",
+    "  5. Establecer ciudad default",
+    `  8. Ajustes (°${config.unidad})`,
+    "  9. Salir",
+    LINEA,
+  ];
+  console.log(colorear(lineas.join("\n"), "cyan"));
 }
 
 export function listarCiudades(ciudades: Ciudad[]): void {
@@ -66,14 +70,19 @@ export function imprimirClima(
   temperatura: number,
   etiqueta: string,
 ): void {
-  console.log(`  ${ciudad.nombre}, ${ciudad.pais}: ${temperatura} ${etiqueta}`);
+  const valor = colorear(`${temperatura} ${etiqueta}`, "amarillo");
+  console.log(`  ${ciudad.nombre}, ${ciudad.pais}: ${valor}`);
 }
 
 export function imprimirError(error: unknown): void {
   const mensaje = error instanceof Error ? error.message : String(error);
-  console.error(`  Error: ${mensaje}`);
+  console.error(colorear(`  Error: ${mensaje}`, "rojo"));
 }
 
 export function mensaje(texto: string): void {
   console.log(`  ${texto}`);
+}
+
+export function mensajeExito(texto: string): void {
+  console.log(colorear(`  ${texto}`, "verde"));
 }
