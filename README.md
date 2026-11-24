@@ -37,6 +37,20 @@ https://api.open-meteo.com/v1/forecast?latitude=45.41117&longitude=-75.69812&dai
 bun init
 ```
 
+## Testing
+
+Los tests están en `test/` y usan el propio Bun (`bun:test`), sin dependencias extra:
+
+```bash
+bun run test        # ejecuta toda la suite
+bun run test:watch  # modo watch
+bun run check       # typecheck + tests
+bun run build       # verifica todo antes de compilar el binario
+```
+
+Si cualquier test falla, `bun run build` se detiene y **no se genera el binario**.
+Las pruebas no hacen peticiones reales ni escriben en el `~/.weather-cli` del usuario.
+
 ### Ejemplo del menú
 Esta es la apariencia que deseamos crear
 

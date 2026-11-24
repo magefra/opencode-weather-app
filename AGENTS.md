@@ -10,10 +10,13 @@ generar un binario ejecutable. La interfaz y los mensajes están en español.
 
 - `bun run start` — ejecuta la app (`src/index.ts`).
 - `bun run dev` — ejecuta con `--watch`.
-- `bun run typecheck` — comprueba tipos con `bun check`.
-- `bun run build` — compila el binario `weather-cli`.
+- `bun run typecheck` — comprueba tipos con `bunx tsc --noEmit`.
+- `bun run test` — ejecuta los tests de `test/` con `bun test --isolate` (sin red ni HOME real).
+- `bun run test:watch` — ejecuta los tests en modo watch.
+- `bun run check` — typecheck + tests.
+- `bun run build` — ejecuta `verify` (typecheck + tests) y solo si pasa compila el binario `weather-cli`.
 
-No hay framework de tests ni toolchain adicional (Bun + `typescript`/`@types/bun` únicamente).
+No hay framework de tests ni toolchain adicional: se usa `bun:test` (Bun + `typescript`/`@types/bun` únicamente).
 
 ## Estructura del código
 
@@ -26,6 +29,9 @@ La fuente vive en `src/` y su estructura está definida en `references/file-syst
 - `src/types/` — tipos globales (`City`, `Weather`, `Settings`, `MenuOption`).
 - `src/api/` — integración con geocoding y forecast de Open-Meteo.
 - `src/utils/` — constantes, colores y formateadores.
+- `test/` — tests automáticos con `bun:test`, espejo de `src/`; `test/helpers/` tiene fixtures y
+  utilidades para HOME temporal. Cada archivo se aísla con `--isolate` porque `mock.module`
+  de Bun es global al proceso.
 
 Dependencias: `types` → nadie; `utils` → `types`; `api`/`storage` → `utils`/`types`;
  `actions` → `api`/`storage`/`presentation`; `presentation/menu` → `actions`.

@@ -1,11 +1,13 @@
 import { mkdir } from "node:fs/promises";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import type { City } from "../types/City";
 import type { AppConfig, Unit } from "../types/Settings";
 
-const DIRECTORY = join(homedir(), ".weather-cli");
-const FILE = join(DIRECTORY, "config.json");
+/** Se calcula en cada llamada para poder aislar el directorio en los tests. */
+function configPath(): string {
+  return join(homedir(), ".weather-cli", "config.json");
+}
 
 function initialConfig(): AppConfig {
   return { ciudades: [], ciudadDefault: null, unidad: "C" };
@@ -38,7 +40,7 @@ function isConfig(value: unknown): value is AppConfig {
 }
 
 export async function loadConfig(): Promise<AppConfig> {
-  const file = Bun.file(FILE);
+  const file = Bun.file(configPath());
   if (!(await file.exists())) return initialConfig();
 
   try {
@@ -60,10 +62,11 @@ export async function loadConfig(): Promise<AppConfig> {
 }
 
 export async function saveConfig(config: AppConfig): Promise<void> {
-  await mkdir(DIRECTORY, { recursive: true });
-  await Bun.write(FILE, `${JSON.stringify(config, null, 2)}\n`);
+  const file = configPath();
+  await mkdir(dirname(file), { recursive: true });
+  await Bun.write(file, `${JSON.stringify(config, null, 2)}\n`);
 }
 
 export function getConfigPath(): string {
-  return FILE;
+  return configPath();
 }

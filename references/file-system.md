@@ -34,3 +34,14 @@ src/
 │   └── ...                 # Otros utilitarios
 ├── index.ts                # Punto de entrada principal de la app CLI
 ```
+
+```bash
+test/                       # Tests con bun:test, espejo de src/
+├── actions/                # Tests de las acciones del usuario
+├── api/                    # Tests de geocoding, forecast y cliente HTTP
+├── presentation/           # Tests de menú, input y output
+├── storage/                # Tests de persistencia con HOME temporal
+├── utils/                  # Tests de formateadores y colores
+├── helpers/                # Fixtures y utilidades (HOME temporal)
+└── index.test.ts           # Test de integración del arranque de la CLI
+```

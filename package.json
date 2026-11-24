@@ -5,9 +5,13 @@
   "private": true,
   "scripts": {
     "start": "bun run src/index.ts",
-    "build": "bun build --compile --outfile weather-cli src/index.ts",
+    "build": "bun run verify && bun build --compile --outfile weather-cli src/index.ts",
     "dev": "bun run src/index.ts --watch",
-    "typecheck": "bun check"
+    "typecheck": "bunx tsc --noEmit",
+    "test": "bun test --isolate test/",
+    "test:watch": "bun test --isolate --watch test/",
+    "verify": "bun run typecheck && bun run test",
+    "check": "bun run verify"
   },
   "devDependencies": {
     "@types/bun": "latest"

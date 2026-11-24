@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Instalar dependencias
+        run: bun install --frozen-lockfile
+      - name: Verificar (typecheck + tests)
+        run: bun run check
+      - name: Compilar (solo si la verificación pasa)
+        run: bun run build
